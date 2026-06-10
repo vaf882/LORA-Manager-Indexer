@@ -24,3 +24,27 @@ pip install requests
 
 python lora_indexer.py
 Откройте сгенерированный lora_index.html в любом браузере.
+
+LORA Manager is a lightweight, fast, and standalone Python script for parsing, managing, and visualizing your collection of LORA models for ComfyUI.
+
+This script was created to solve the main pain point of working with hundreds of LORAs: remembering exactly what a model does, what its trigger words are, and what the generated results look like, without having to check Civitai every single time.
+
+The script scans your models folder, quickly extracts metadata, and generates an offline, visually pleasing HTML gallery complete with filters, search functionality, and a media player right in your browser. Forget about manually searching for trigger words on Civitai!
+
+✨ Key Features
+- Smart Cache (lora_database.json): The script instantly skips already processed models by verifying their exact file size. Rescanning even a terabyte-sized collection takes only seconds.
+- Offline Previews: Images and videos from Civitai are automatically downloaded to the _temp/ folder. Your gallery will load instantly and work without an internet connection.
+- Built-in Media Player (Popup Lightbox): Full support for .mp4 and .webm video previews. Click on any image or video to open it fullscreen along with its generation prompt.
+- Dynamic Tabs: Automatic filtering of LORAs by their base model (e.g., switch between SD 1.5, SDXL, and Flux with a single click).
+- Click-to-Copy: Copy long prompts and trigger words to your clipboard with a simple click.
+- Direct Header Reading: The script reads metadata (Kohya SS, ModelSpec) directly from the .safetensors binary header, without loading massive model weights into RAM.
+- Fail-Safe Execution: You can interrupt the process with Ctrl+C at any time — the script will save its progress and generate the gallery for the already processed models.
+
+📦 Installation & Usage
+- Download lora_indexer.py into your models directory (e.g., ComfyUI/models/loras).
+- Install the requests dependency (if not installed):
+
+pip install requests
+
+Run the script:
+python lora_indexer.py
