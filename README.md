@@ -1,4 +1,4 @@
-# LORA-Manager-Indexer
+# LORA-Manager-Indexer (Rus)
 LORA Manager - это легковесный, быстрый и автономный Python-скрипт для парсинга, управления и визуализации вашей коллекции LORA моделей для ComfyUI
 
 Скрипт писался для того, чтобы решить главную боль при работе с сотнями LORA — вспомнить, что именно делает модель, какое у нее триггерное слово и как выглядит результат, без необходимости каждый раз лезть на Civitai.
@@ -25,6 +25,7 @@ pip install requests
 python lora_indexer.py
 Откройте сгенерированный lora_index.html в любом браузере.
 
+# LORA-Manager-Indexer (Eng)
 LORA Manager is a lightweight, fast, and standalone Python script for parsing, managing, and visualizing your collection of LORA models for ComfyUI.
 
 This script was created to solve the main pain point of working with hundreds of LORAs: remembering exactly what a model does, what its trigger words are, and what the generated results look like, without having to check Civitai every single time.
