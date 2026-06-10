@@ -13,7 +13,6 @@ except ImportError:
     exit(1)
 
 DB_FILE = "lora_database.json"
-# Оставляем ту же версию, чтобы использовать уже собранные данные и медиа из кеша
 CACHE_VERSION = "1.3_local_media"
 
 def calculate_sha256(file_path):
@@ -52,14 +51,12 @@ def parse_safetensors_header(filepath):
     except: return {}
 
 def generate_html(data, total_gb, output_path):
-    # Собираем уникальные базовые модели для вкладок
     base_models = set()
     for item in data:
         b = item["Base Model"] if item["Base Model"] else "Unknown Base"
         base_models.add(b)
     base_models = sorted(list(base_models))
 
-    # Формируем HTML кнопок
     tabs_html = '<div class="tabs">\n'
     tabs_html += '<button class="tab-btn active" data-base="All" onclick="filterByBaseModel(this)">ALL</button>\n'
     for b in base_models:
@@ -87,7 +84,6 @@ def generate_html(data, total_gb, output_path):
         .stat-badge {{ background: #2a2a35; padding: 8px 15px; border-radius: 8px; font-weight: bold; border: 1px solid #444; }}
         #searchInput {{ padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); width: 100%; max-width: 400px; font-size: 16px; }}
         
-        /* Стили для вкладок */
         .tabs {{ display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }}
         .tab-btn {{ background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-weight: bold; font-size: 0.9rem; }}
         .tab-btn:hover {{ background: #2a2a35; color: var(--text-main); border-color: #555; }}
@@ -95,7 +91,8 @@ def generate_html(data, total_gb, output_path):
 
         .grid {{ display: flex; flex-direction: column; gap: 20px; }}
         
-        .card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.2s; width: 100%; }}
+        /* ИСПРАВЛЕНИЕ: вернули display: flex; flex-direction: column; */
+        .card {{ display: flex; flex-direction: column; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.2s; width: 100%; }}
         .card h3 {{ margin: 0 0 10px 0; font-size: 1.4rem; word-break: break-all; }}
         
         .badges {{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }}
@@ -121,7 +118,7 @@ def generate_html(data, total_gb, output_path):
         .image-prompt::-webkit-scrollbar-thumb {{ background: #444; border-radius: 2px; }}
         .image-prompt:hover {{ background: #2a2a35; color: #fff; }}
         
-        .meta-details {{ margin-top: 15px; font-size: 0.9rem; }}
+        .meta-details {{ margin-top: 15px; font-size: 0.9rem; flex-grow: 1; }}
         .meta-details summary {{ cursor: pointer; color: var(--accent); user-select: none; padding: 5px 0; }}
         .meta-list {{ list-style: none; padding: 15px; margin: 10px 0 0 0; background: #18181c; border-radius: 6px; max-height: 200px; overflow-y: auto; }}
         .meta-list li {{ margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 8px; word-break: break-word; }}
@@ -167,7 +164,6 @@ def generate_html(data, total_gb, output_path):
         sha256 = html.escape(item.get("SHA256", "N/A"))
         images = item.get("Images", [])
         
-        # Добавили data-base-model для фильтрации
         card_html = f'''
         <div class="card" data-search="{name.lower()} {base.lower()} {triggers.lower()}" data-base-model="{base}">
             <h3>{name}</h3>
@@ -238,17 +234,14 @@ def generate_html(data, total_gb, output_path):
         let currentBaseModelFilter = 'All';
 
         function filterByBaseModel(btnElement) {
-            // Получаем выбранную базу
             currentBaseModelFilter = btnElement.getAttribute('data-base');
             
-            // Обновляем активную кнопку
             const tabs = document.getElementsByClassName('tab-btn');
             for (let i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove('active');
             }
             btnElement.classList.add('active');
             
-            // Применяем фильтры
             applyFilters();
         }
 
@@ -263,6 +256,7 @@ def generate_html(data, total_gb, output_path):
                 const matchesSearch = searchData.includes(searchInput);
                 const matchesBase = (currentBaseModelFilter === 'All' || cardBaseModel === currentBaseModelFilter);
                 
+                // Теперь JS устанавливает flex, а CSS держит flex-direction: column
                 cards[i].style.display = (matchesSearch && matchesBase) ? "flex" : "none";
             }
         }
